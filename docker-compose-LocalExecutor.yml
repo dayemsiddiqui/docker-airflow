@@ -17,6 +17,15 @@ services:
         volumes:
             - db-data:/data/db
             - mongo-config:/data/configdb
+    
+    api-server:
+        build: ./web
+        ports:
+            - "5000:5000"
+        volumes:
+            - ./web:/code
+        depends_on:
+            - mongo
 
     webserver:
         image: puckel/docker-airflow:1.10.2
