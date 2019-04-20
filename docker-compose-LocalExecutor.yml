@@ -9,6 +9,11 @@ services:
     
     redis:
         image: 'redis'
+    
+    mongo:
+        image: mongo
+        ports:
+        - "27017:27017"
 
     webserver:
         image: puckel/docker-airflow:1.10.2
@@ -16,6 +21,7 @@ services:
         depends_on:
             - postgres
             - redis
+            - mongo
         environment:
             - LOAD_EX=n
             - EXECUTOR=Local
