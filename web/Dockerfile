@@ -1,6 +1,5 @@
 FROM python:3.6
 ADD . /code
 WORKDIR /code
-EXPOSE 5000
-RUN pip install -r requirements.txt
-CMD FLASK_APP=app.py flask run
+RUN pip3 install -r requirements.txt
+CMD ["flask", "run", "--host", "0.0.0.0"]
