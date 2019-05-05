@@ -23,6 +23,7 @@ def process_data():
         for item in data:
                 item['location'] = 'remote'
                 item['date'] = dateparser.parse(item.get('date', 'None')).isoformat() 
+                temp['title'] = item.get('position', '')
                 item['source'] = REDIS_KEY
         store.set(REDIS_KEY, json.dumps(data))
         
