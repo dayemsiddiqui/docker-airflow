@@ -1,15 +1,13 @@
-import pymongo
 from pymongo import UpdateOne
 import requests
-import redis
 import json
 import dateutil.parser as dateparser
 
+from bootstrap import store, db
 
-MONGO_DB = "remotejobs"
-REDIS_KEY = 'remoteokio'
-store = redis.Redis(host='redis')
-client = pymongo.MongoClient('mongo', 27017)
+REDIS_KEY = "remoteokio"
+
+
 
 def fetch_data():
     r = requests.get('https://remoteok.io/api')
@@ -28,7 +26,6 @@ def process_data():
         store.set(REDIS_KEY, json.dumps(data))
         
 def store_data():
-    db = client[MONGO_DB]
     data = store.get(REDIS_KEY)
     data = json.loads(data)
     JobsTable = db.jobs

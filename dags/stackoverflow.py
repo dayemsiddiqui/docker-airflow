@@ -1,16 +1,13 @@
-import pymongo
 from pymongo import UpdateOne
 import requests
-import redis
 import json
 from lxml import etree, objectify
 from lxml.etree import fromstring
 import dateutil.parser as dateparser
 
-MONGO_DB = "remotejobs"
-REDIS_KEY = 'stackoverflow'
-store = redis.Redis(host='redis')
-client = pymongo.MongoClient('mongo', 27017)
+from bootstrap import store, db
+
+REDIS_KEY = "stackoverflow"
 
 def fetch_data():
     r = requests.get('https://stackoverflow.com/jobs/feed')
@@ -50,7 +47,6 @@ def process_data():
         store.set(REDIS_KEY, json.dumps(data))
         
 def store_data():
-    db = client[MONGO_DB]
     data = store.get(REDIS_KEY)
     data = json.loads(data)
     JobsTable = db.jobs

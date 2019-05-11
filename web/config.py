@@ -1,4 +1,0 @@
-DEBUG = True
-REDIS_HOST = 'redis'
-MONGO_HOST = 'mongo'
-MONGO_PORT = 27017

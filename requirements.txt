@@ -1,2 +1,3 @@
 pymongo
 lxml
+python-dotenv
