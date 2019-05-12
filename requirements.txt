@@ -1,3 +1,4 @@
 pymongo
 lxml
 python-dotenv
+geotext

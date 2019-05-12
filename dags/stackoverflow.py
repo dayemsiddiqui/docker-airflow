@@ -4,7 +4,7 @@ import json
 from lxml import etree, objectify
 from lxml.etree import fromstring
 import dateutil.parser as dateparser
-
+from utils import process_locations, keep_unique
 from bootstrap import store, db
 
 REDIS_KEY = "stackoverflow"
@@ -38,9 +38,12 @@ def process_data():
             temp['position'] = item.findtext('title', default = 'None')
             temp['slug'] = item.findtext('title', default = 'None')
             temp['title'] = item.findtext('title', default = 'None')
-            temp['tags'] = tags_str
+            temp['tags'] = keep_unique(tags_str)
             temp['url'] = item.findtext('link', default = 'None')
-            temp['location'] = item.findtext('location', default = 'remote')
+            temp['location'] =  process_locations(
+                temp['title'],
+                temp['description'],
+                item.findtext('location', default = 'N/A')) 
             temp['source'] = REDIS_KEY
             data.append(temp)
     
@@ -53,3 +56,4 @@ def store_data():
     ids=[item.pop("id") for item in data]
     operations=[UpdateOne({"id":idn},{'$set':data}, upsert=True) for idn ,data in zip(ids,data)]
     JobsTable.bulk_write(operations)
+
